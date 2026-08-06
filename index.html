@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FIB Instructor — Трекер</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand">
+      <p class="brand-mark">FIB · Instructor</p>
+      <h1>Трекер смен</h1>
+      <p class="brand-sub">Заявки · Группы · Пруфы · Заметки</p>
+    </div>
+
+    <div class="norms" id="norms">
+      <div class="norm" data-kind="apps">
+        <span class="norm-label">Заявки</span>
+        <strong class="norm-value"><span id="appsCount">0</span>/15</strong>
+        <div class="bar"><i id="appsBar"></i></div>
+      </div>
+      <div class="norm" data-kind="groups">
+        <span class="norm-label">Группы</span>
+        <strong class="norm-value"><span id="groupsCount">0</span>/3</strong>
+        <div class="bar"><i id="groupsBar"></i></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab is-active" data-tab="apps" role="tab">Заявки</button>
+    <button class="tab" data-tab="groups" role="tab">Группы</button>
+    <button class="tab" data-tab="proofs" role="tab">Пруфы</button>
+    <button class="tab" data-tab="notes" role="tab">Заметки</button>
+  </nav>
+
+  <main>
+    <!-- ЗАЯВКИ -->
+    <section class="panel is-active" id="panel-apps" role="tabpanel">
+      <header class="panel-head">
+        <h2>Одобренные заявки на повышение</h2>
+        <p>Галочка в Discord → отписка в кадры → отметь здесь. Норма: 15.</p>
+      </header>
+
+      <form class="add-form" id="appsForm">
+        <input name="nick" type="text" placeholder="Nick + Static (Logan Barrot 118119)" required />
+        <input name="ranks" type="text" placeholder="С какого на какой (5-6)" />
+        <input name="points" type="text" placeholder="Баллы (200)" />
+        <input name="proof" type="url" placeholder="Ссылка на доказательства (опционально)" />
+        <button type="submit">+ Одобрил</button>
+      </form>
+
+      <ul class="list" id="appsList"></ul>
+    </section>
+
+    <!-- ГРУППЫ -->
+    <section class="panel" id="panel-groups" role="tabpanel">
+      <header class="panel-head">
+        <h2>Группы / регруппы</h2>
+        <p>Сборы людей на мероприятие. Норма: 3.</p>
+      </header>
+
+      <form class="add-form" id="groupsForm">
+        <input name="title" type="text" placeholder="Название / тип мероприятия" required />
+        <input name="people" type="text" placeholder="Сколько человек / кто" />
+        <input name="when" type="text" placeholder="Когда (дата/время)" />
+        <button type="submit">+ Группа сделана</button>
+      </form>
+
+      <ul class="list" id="groupsList"></ul>
+    </section>
+
+    <!-- ПРУФЫ -->
+    <section class="panel" id="panel-proofs" role="tabpanel">
+      <header class="panel-head">
+        <h2>Пруфы</h2>
+        <p>Сюда кидай ссылки на доказательства (Discord, клипы, скрины).</p>
+      </header>
+
+      <form class="add-form" id="proofsForm">
+        <input name="title" type="text" placeholder="Что за пруф" required />
+        <input name="url" type="url" placeholder="https://discord.com/..." required />
+        <button type="submit">+ Добавить пруф</button>
+      </form>
+
+      <ul class="list" id="proofsList"></ul>
+    </section>
+
+    <!-- ЗАМЕТКИ -->
+    <section class="panel" id="panel-notes" role="tabpanel">
+      <header class="panel-head">
+        <h2>Заметки</h2>
+        <p>Черновик отписок в кадры, напоминания, что ещё сделать.</p>
+      </header>
+
+      <textarea id="notesArea" class="notes" placeholder="Например: отписать в кадры про Logan 5→6, завтра регрупп в 20:00..."></textarea>
+      <p class="notes-hint">Сохраняется само на этом устройстве.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <button type="button" id="resetWeek" class="ghost">Сбросить прогресс нормы</button>
+    <span>Данные хранятся локально в браузере</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
