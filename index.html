@@ -16,17 +16,22 @@
     <div class="brand">
       <p class="brand-mark">FIB · Instructor</p>
       <h1>Трекер смен</h1>
-      <p class="brand-sub">Заявки · Группы · Пруфы · Заметки</p>
+      <p class="brand-sub">Таблица по неделям · заявки · группы · пруфы</p>
     </div>
 
-    <div class="norms" id="norms">
+    <div class="week-bar">
+      <label for="weekSelect">Неделя</label>
+      <select id="weekSelect"></select>
+    </div>
+
+    <div class="norms">
       <div class="norm" data-kind="apps">
-        <span class="norm-label">Заявки</span>
+        <span class="norm-label">Заявки за неделю</span>
         <strong class="norm-value"><span id="appsCount">0</span>/15</strong>
         <div class="bar"><i id="appsBar"></i></div>
       </div>
       <div class="norm" data-kind="groups">
-        <span class="norm-label">Группы</span>
+        <span class="norm-label">Группы за неделю</span>
         <strong class="norm-value"><span id="groupsCount">0</span>/3</strong>
         <div class="bar"><i id="groupsBar"></i></div>
       </div>
@@ -36,77 +41,134 @@
   <nav class="tabs" role="tablist">
     <button class="tab is-active" data-tab="apps" role="tab">Заявки</button>
     <button class="tab" data-tab="groups" role="tab">Группы</button>
+    <button class="tab" data-tab="history" role="tab">По неделям</button>
     <button class="tab" data-tab="proofs" role="tab">Пруфы</button>
     <button class="tab" data-tab="notes" role="tab">Заметки</button>
   </nav>
 
   <main>
-    <!-- ЗАЯВКИ -->
     <section class="panel is-active" id="panel-apps" role="tabpanel">
       <header class="panel-head">
-        <h2>Одобренные заявки на повышение</h2>
-        <p>Галочка в Discord → отписка в кадры → отметь здесь. Норма: 15.</p>
+        <h2>Заявки на повышение</h2>
+        <p>Ник + статик кого повысил и ссылка на пруф. Норма: 15 / неделя.</p>
       </header>
 
-      <form class="add-form" id="appsForm">
-        <input name="nick" type="text" placeholder="Nick + Static (Logan Barrot 118119)" required />
-        <input name="ranks" type="text" placeholder="С какого на какой (5-6)" />
-        <input name="points" type="text" placeholder="Баллы (200)" />
-        <input name="proof" type="url" placeholder="Ссылка на доказательства (опционально)" />
-        <button type="submit">+ Одобрил</button>
+      <form class="add-form add-form-row" id="appsForm">
+        <input name="nick" type="text" placeholder="Nick + Static — кого повысил" required autocomplete="off" />
+        <input name="proof" type="url" placeholder="Ссылка на пруф" required />
+        <button type="submit">Добавить</button>
       </form>
 
-      <ul class="list" id="appsList"></ul>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-num">#</th>
+              <th>Nick + Static</th>
+              <th>Пруф</th>
+              <th>Дата</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="appsBody"></tbody>
+        </table>
+        <p class="empty" id="appsEmpty">За эту неделю заявок ещё нет.</p>
+      </div>
     </section>
 
-    <!-- ГРУППЫ -->
     <section class="panel" id="panel-groups" role="tabpanel">
       <header class="panel-head">
         <h2>Группы / регруппы</h2>
-        <p>Сборы людей на мероприятие. Норма: 3.</p>
+        <p>Норма: 3 / неделя.</p>
       </header>
 
-      <form class="add-form" id="groupsForm">
-        <input name="title" type="text" placeholder="Название / тип мероприятия" required />
+      <form class="add-form add-form-row" id="groupsForm">
+        <input name="title" type="text" placeholder="Мероприятие / регрупп" required />
         <input name="people" type="text" placeholder="Сколько человек / кто" />
-        <input name="when" type="text" placeholder="Когда (дата/время)" />
-        <button type="submit">+ Группа сделана</button>
+        <button type="submit">Добавить</button>
       </form>
 
-      <ul class="list" id="groupsList"></ul>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-num">#</th>
+              <th>Группа</th>
+              <th>Люди</th>
+              <th>Дата</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="groupsBody"></tbody>
+        </table>
+        <p class="empty" id="groupsEmpty">За эту неделю групп ещё нет.</p>
+      </div>
     </section>
 
-    <!-- ПРУФЫ -->
+    <section class="panel" id="panel-history" role="tabpanel">
+      <header class="panel-head">
+        <h2>Сводка по неделям</h2>
+        <p>Сколько заявок и групп сделал за каждую неделю. Данные не стираются.</p>
+      </header>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Неделя</th>
+              <th>Заявки</th>
+              <th>Норма 15</th>
+              <th>Группы</th>
+              <th>Норма 3</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+        <p class="empty" id="historyEmpty">Пока нет данных.</p>
+      </div>
+    </section>
+
     <section class="panel" id="panel-proofs" role="tabpanel">
       <header class="panel-head">
-        <h2>Пруфы</h2>
-        <p>Сюда кидай ссылки на доказательства (Discord, клипы, скрины).</p>
+        <h2>Общие пруфы</h2>
+        <p>Доп. ссылки не привязанные к конкретной заявке.</p>
       </header>
 
-      <form class="add-form" id="proofsForm">
+      <form class="add-form add-form-row" id="proofsForm">
         <input name="title" type="text" placeholder="Что за пруф" required />
-        <input name="url" type="url" placeholder="https://discord.com/..." required />
-        <button type="submit">+ Добавить пруф</button>
+        <input name="url" type="url" placeholder="https://..." required />
+        <button type="submit">Добавить</button>
       </form>
 
-      <ul class="list" id="proofsList"></ul>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-num">#</th>
+              <th>Название</th>
+              <th>Ссылка</th>
+              <th>Дата</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="proofsBody"></tbody>
+        </table>
+        <p class="empty" id="proofsEmpty">Пруфов пока нет.</p>
+      </div>
     </section>
 
-    <!-- ЗАМЕТКИ -->
     <section class="panel" id="panel-notes" role="tabpanel">
       <header class="panel-head">
         <h2>Заметки</h2>
-        <p>Черновик отписок в кадры, напоминания, что ещё сделать.</p>
+        <p>Черновик отписок в кадры.</p>
       </header>
-
-      <textarea id="notesArea" class="notes" placeholder="Например: отписать в кадры про Logan 5→6, завтра регрупп в 20:00..."></textarea>
-      <p class="notes-hint">Сохраняется само на этом устройстве.</p>
+      <textarea id="notesArea" class="notes" placeholder="Отписать в кадры..."></textarea>
+      <p class="notes-hint">Сохраняется само.</p>
     </section>
   </main>
 
   <footer class="foot">
-    <button type="button" id="resetWeek" class="ghost">Сбросить прогресс нормы</button>
-    <span>Данные хранятся локально в браузере</span>
+    <span>Всё хранится в браузере · история недель сохраняется</span>
   </footer>
 
   <script src="app.js"></script>
